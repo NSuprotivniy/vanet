@@ -53,7 +53,7 @@ def packets_second_in(packets, max_node, max_time):
         if node != None:
             
             if data.get(node, None) == None:
-	        data[node] = [0] * max_time
+                data[node] = [0] * max_time
 
             time = packet.get('Time') - 1
             data.get(node)[time] = data.get(node)[time] + 1
@@ -82,7 +82,7 @@ def packets_second_out(packets, max_node, max_time):
         if dest != '127.0.0.1' and dest != '10.1.2.255':
             
             if data.get(dest, None) == None:
-	        data[dest] = [0] * max_time
+                data[dest] = [0] * max_time
 
             time = packet.get('Time') - 1
             data.get(dest)[time] = data.get(dest)[time] + 1
@@ -121,6 +121,7 @@ def hops_second(packets, max_node, max_time):
         data.get('average')[time] = data.get('average')[time] + hops
         data.get('count')[time] = data.get('count')[time] + 1
 
+    print max_time, data.get('count')
     for i in range(max_time):
         data.get('average')[i] = float( data.get('average')[i]) / float(data.get('count')[i] )
         data.get('average')[i] = float( '{:.3f}'.format( data.get('average')[i]) )
@@ -128,7 +129,7 @@ def hops_second(packets, max_node, max_time):
     return data
 
 if len(sys.argv) == 1 or sys.argv[1] == 'help':
-    print 'enter attack name as first argument!'
+    print ('enter attack name as first argument!')
 else:
     packets, max_node, max_time = get_packets(sys.argv[1])
 
@@ -138,11 +139,11 @@ else:
     packets_out, packets_out_stat = packets_second_out(packets,max_node,max_time)
     packets_out, packets_out_stat = pd.DataFrame(packets_out), pd.DataFrame(packets_out_stat)
 
-    hops = pd.DataFrame(hops_second(packets,max_node,max_time))
+    #hops = pd.DataFrame(hops_second(packets,max_node,max_time))
 
     packets_in.to_csv(sys.argv[1] + '_packets_in.csv', index=False) # strings - seconds, columns - nodes
     packets_in_stat.to_csv(sys.argv[1] + '_packets_in_stat.csv', index=False) # strings - nodes
     packets_out.to_csv(sys.argv[1] + '_packets_out.csv', index=False) # strings - seconds, columns - nodes
     packets_out_stat.to_csv(sys.argv[1] + '_packets_out_stat.csv', index=False) # strings - nodes
-    hops.to_csv(sys.argv[1] + '_hops.csv', index=False) # strings - seconds
+    #hops.to_csv(sys.argv[1] + '_hops.csv', index=False) # strings - seconds
 
